@@ -1,0 +1,33 @@
+name: Residual Sweep PoC
+
+on:
+  workflow_dispatch:
+
+jobs:
+  residual-sweep:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: yarn
+
+      - name: Install project dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: stable
+
+      - name: Install Solidity dependencies
+        working-directory: contracts/relay-chain
+        run: forge soldeer install
+
+      - name: Run ResidualSweep PoC
+        working-directory: contracts/relay-chain
+        run: forge test --match-path test/MulticallRouter/ResidualSweepPoC.t.sol -vvv
