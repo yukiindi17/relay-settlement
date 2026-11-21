@@ -26,8 +26,9 @@ contract ResidualSweepPoCTest is Test {
     router = new MulticallRouter(admin);
     token = new MyToken();
 
+    bytes32 depositoryRole = router.DEPOSITORY_ROLE();
     vm.prank(admin);
-    router.grantRole(router.DEPOSITORY_ROLE(), depository);
+    router.grantRole(depositoryRole, depository);
   }
 
   function _single(address to, bytes memory data)
